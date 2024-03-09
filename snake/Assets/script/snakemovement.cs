@@ -12,11 +12,10 @@ public class snakemovement : MonoBehaviour
 
     private Vector2 direction;
 
-    //boolGoingUp
-    //boolGoingDown
-    //boolGoingLeft
-    //bool GoingRight
-
+    bool goingUp;
+    bool goingDown;
+    bool goingLeft;
+    bool goingRight;
    
     public Transform bodyPrefab; //place to store the body
     List<Transform> segments; //list of body parts
@@ -33,17 +32,42 @@ public class snakemovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W)){
+        if (Input.GetKeyDown(KeyCode.W) && goingDown != true)
+        {
             direction = Vector2.up;
+            //mark as going up 
+            goingUp = true;
+            goingDown = false;
+            goingLeft = false;
+            goingRight = false;
         }
-        else if (Input.GetKeyDown(KeyCode.A)){
+
+        else if (Input.GetKeyDown(KeyCode.A) && goingRight == false)
+        {
             direction = Vector2.left;
+            //mark as going left
+            goingUp = false;
+            goingLeft = true;
+            goingDown = false;
+            goingRight = false;
         }
-        else if (Input.GetKeyDown(KeyCode.S)){
+        else if (Input.GetKeyDown(KeyCode.S) && goingUp != true)
+        {
             direction = Vector2.down;
+            //mark as going down
+            goingUp = false;
+            goingDown = true;
+            goingLeft = false;
+            goingRight = false;
         }
-        else if (Input.GetKeyDown(KeyCode.D)){
+        else if (Input.GetKeyDown(KeyCode.D) && goingLeft == false)
+        {
             direction = Vector2.right;
+            //mark as going right
+            goingUp = false;
+            goingDown = false;
+            goingLeft = false;
+            goingRight = true;
         }
     }
 
@@ -65,11 +89,15 @@ public class snakemovement : MonoBehaviour
         segments.Add(segment);
     }
 
+    
+
     void OnTriggerEnter2D (Collider2D other){
         if (other.tag == "Food")
         {
             Debug.Log("hit");
             Grow();
+
+            Time.fixedDeltaTime -= 0.001f;
         }
 
         else if (other.tag == "Obstacle"){
